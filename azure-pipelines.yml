@@ -12,10 +12,10 @@ variables:
   azureSubscription: '53e2f6a4-eae7-42e0-bead-ccee4dc7104b'
 
   # Web app name
-  webAppName: 'AukioFrontEnd'
+  webAppName: 'aukiofrontend'
 
   # Environment name
-  environmentName: 'AukioFrontEnd'
+  environmentName: 'aukiofrontend'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
