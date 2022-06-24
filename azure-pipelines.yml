@@ -29,7 +29,24 @@ stages:
     pool:
       vmImage: $(vmImageName)
 
+
     steps:
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: 'sonarcloud'
+        organization: '408135'
+        scannerMode: 'MSBuild'
+        projectKey: '408135_AukioFrontend.git'
+        projectName: 'AukioFrontend.git'
+    
+    - task: SonarCloudAnalyze@1
+      displayName: 'Run SonarCloud analysis'
+
+    - task: SonarCloudPublish@1
+      displayName: 'Publish results on build summary'
+      inputs:
+        pollingTimeoutSec: '300'
+
     - task: ArchiveFiles@2
       displayName: 'Archive files'
       inputs:
