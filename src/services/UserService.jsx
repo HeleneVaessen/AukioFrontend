@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "universal-cookie";
 
-const host = 'http://localhost:20001/';
+const host = 'http://20.91.190.130/';
 class UserService {
     register = (Email, Name, Password, School) => {
         console.log(Email, Name, Password, School)
@@ -23,7 +23,6 @@ class UserService {
     }
 
     getID = () => {
-        console.log(new Cookies().get("jjj"));
         return axios.post(host + 'authentication/translatetoID', null, {
             "Content-Type": "application/json",
             headers: { Authorization: "Bearer " + new Cookies().get("Jwt") }

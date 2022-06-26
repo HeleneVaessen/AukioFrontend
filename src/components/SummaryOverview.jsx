@@ -2,20 +2,30 @@ import React, { Component, useState } from "react";
 import NavigationBar from "./NavigationBar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
-import { Form, Alert, FormGroup, Input, Label, Row, Col } from "react-bootstrap";
+import { Table} from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import UserService from "../services/UserService";
+import SummaryService from "../services/SummaryService";
 
 export default class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: '',
-            password: '',
+            summaries:[],
             buttonInactive: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount() {
+
+        SummaryService.getSummaries().then((response) => {
+            this.setState({ summaries: response.data });
+        }).catch(() => {
+            alert("You must be logged in")
+            window.location.pathname = "/";
+        })
     }
 
     handleChange = (event) => {
@@ -33,33 +43,25 @@ export default class Login extends Component {
         return (
             <div>
                 <NavigationBar />
-                <Form onSubmit={this.handleSubmit}>
-                    <Form.Label>
-                        Email:
-          <Form.Control type="text" name="email" value={this.state.email} onChange={this.handleChange} />
-                    </Form.Label>
-                    <Form.Label>
-                        Password:
-          <Form.Control type="password" name="password" value={this.state.password} onChange={this.handleChange} />
-                    </Form.Label>
-                    <Form.Control disabled={this.state.buttonInactive} type="submit" value="Login" block />
-                </Form>
+                <Table>
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Content</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.state.summaries.map(summary =>
+                            <tr>
+                                <td>{summary.title} </td>
+                                <td> {summary.content}</td>
+                                </tr>
+                            )}
+                        </tbody>
+                </Table>
             </div>
         );
     }
 
-    login = (email, password) => {
-        UserService.login(email, password).then(
-            (response) => {
-                if (response.status === 200) {
-                    alert('Succes');
-                }
-            }
-        ).catch((error) => {
-            console.log(error);
-            alert('Can not login, check credentials')
-            this.setState({ buttonInactive: false });
-        }
-        );
-    }
+
 }

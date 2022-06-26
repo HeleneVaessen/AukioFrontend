@@ -1,23 +1,37 @@
 import axios from "axios";
-const host = 'http://localhost:20001/';
+import Cookies from "universal-cookie"
+
+const host = 'http://20.91.190.130/';
+
 class SummaryService {
-    addSummary = () => {
-        console.log(Email, Tittle, Summary, Subject)
-        return axios.post(host + 'addSummary', {
-            Name, Email, School, Password
-        });
+
+    getSummaries = () => {
+        console.log(new Cookies().get("Jwt"))
+        return axios.get(host + 'api/summary/getSummaries', {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + new Cookies().get("Jwt")
+            }}).
+            then((response) => {
+                console.log(response.data)
+                if (response.status === 200) {
+                    return response
+                }
+            }).catch(
+                console.log("mislukt")
+            );
     }
 
-    getSummaries = (Email)=> {
-        return axios.post(host + 'getSummaries', {
-            Email
-        });
-    }
-
-    openSummary = (Email) => {
-        return axios.post(host + 'openSummary', {
-            Email
-        });
+    addSummary = (id, title, content) => {
+        let userid = parseInt(id);
+        return axios.post(host + 'api/summary/postSummary', {
+            userid, title, content
+        },
+            {headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + new Cookies().get("Jwt")
+            }
+            });
     }
 }
 export default new SummaryService();
